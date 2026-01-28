@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Le passé composé - Version Mobile</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .serif { font-family: 'Quicksand', sans-serif; }
+        
+        @keyframes dance {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(-10deg); }
+            75% { transform: translateY(-20px) rotate(10deg); }
+        }
+        .dancing-person { animation: dance 0.6s ease-in-out infinite; display: inline-block; font-size: 3rem; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .confetti { position: fixed; width: 10px; height: 10px; pointer-events: none; z-index: 9999; }
+        
+        .color-black { color: #000000; }
+        .color-blue { color: #3B82F6; }
+        .color-red { color: #DC2626; }
+        .color-pronoun { color: #ec4899; }
+        .highlight-object { background-color: #fef08a; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            min-height: 50px;
+            font-size: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .btn-primary {
+                padding: 1rem 2rem;
+                font-size: 1.125rem;
+            }
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            font-size: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .btn-secondary {
+                padding: 0.75rem 1.5rem;
+            }
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.25rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (min-width: 640px) {
+            .card {
+                padding: 2rem;
+            }
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+            padding: 1rem;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 1.5rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @media (min-width: 640px) {
+            .modal-content {
+                padding: 3rem;
+            }
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            min-height: 50px;
+        }
+        
+        @media (min-width: 640px) {
+            input[type="text"] {
+                padding: 0.75rem;
+                font-size: 1.125rem;
+            }
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .option-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .option-btn {
+                padding: 1.25rem;
+                font-size: 1.125rem;
+            }
+        }
+        
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .option-btn.correct {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        
+        .option-btn.incorrect {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        /* Système de clic tactile */
+        .clickable-item {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            min-height: 50px;
+        }
+        
+        .clickable-item.selected {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px #667eea;
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .drop-zone {
+            min-height: 60px;
+            transition: all 0.2s ease;
+        }
+        
+        .drop-zone.available {
+            background-color: #DBEAFE;
+            border: 2px dashed #667eea;
+        }
+        
+        .drop-zone.filled {
+            background-color: #F3F4F6;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Application principale
+        function App() {
+            const [currentScreen, setCurrentScreen] = useState('menu');
+            const [score, setScore] = useState(0);
+            const [completedExercises, setCompletedExercises] = useState(new Set());
+
+            const addPoints = (points, exerciseId) => {
+                setScore(prev => prev + points);
+                setCompletedExercises(prev => new Set([...prev, exerciseId]));
+            };
+
+            const renderScreen = () => {
+                switch(currentScreen) {
+                    case 'menu':
+                        return <MenuScreen onNavigate={setCurrentScreen} score={score} completedExercises={completedExercises} />;
+                    case 'tutorial':
+                        return <TutorialScreen onBack={() => setCurrentScreen('menu')} />;
+                    case 'ex1':
+                        return <Exercise1 onBack={() => setCurrentScreen('menu')} onComplete={addPoints} />;
+                    case 'ex2':
+                        return <Exercise2 onBack={() => setCurrentScreen('menu')} onComplete={addPoints} />;
+                    case 'ex3':
+                        return <Exercise3 onBack={() => setCurrentScreen('menu')} onComplete={addPoints} />;
+                    case 'cheatsheet':
+                        return <CheatsheetScreen onBack={() => setCurrentScreen('menu')} />;
+                    default:
+                        return <MenuScreen onNavigate={setCurrentScreen} score={score} completedExercises={completedExercises} />;
+                }
+            };
+
+            return renderScreen();
+        }
+
+        // Menu principal
+        function MenuScreen({ onNavigate, score, completedExercises }) {
+            const exercises = [
+                { id: 'tutorial', title: 'Tutoriel', icon: '📚', description: 'Apprends les bases', points: 0, screen: 'tutorial' },
+                { id: 'ex1', title: 'Exercice 1', icon: '🎯', description: 'Formation simple', points: 10, screen: 'ex1' },
+                { id: 'ex2', title: 'Exercice 2', icon: '🔍', description: 'Choix de l\'auxiliaire', points: 20, screen: 'ex2' },
+                { id: 'ex3', title: 'Exercice 3', icon: '✏️', description: 'Accords', points: 30, screen: 'ex3' },
+                { id: 'cheatsheet', title: 'Antisèche', icon: '📋', description: 'Résumé complet', points: 0, screen: 'cheatsheet' }
+            ];
+
+            return (
+                <div className="min-h-screen p-4 sm:p-8">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="text-center mb-6 sm:mb-8 fade-in">
+                            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-3 sm:mb-4">
+                                Le Passé Composé
+                            </h1>
+                            <p className="text-lg sm:text-2xl text-white opacity-90">
+                                Module interactif FLE
+                            </p>
+                            
+                            <div className="mt-4 sm:mt-6 inline-block bg-white rounded-full px-6 sm:px-8 py-3 sm:py-4 shadow-lg">
+                                <p className="text-xl sm:text-2xl font-bold text-purple-600">
+                                    🏆 Score : {score} points
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-4 sm:gap-6">
+                            {exercises.map(exercise => (
+                                <button
+                                    key={exercise.id}
+                                    onClick={() => onNavigate(exercise.screen)}
+                                    className="card text-left hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 min-h-[100px]"
+                                >
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="text-4xl sm:text-5xl">{exercise.icon}</div>
+                                        <div className="flex-1">
+                                            <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1">
+                                                {exercise.title}
+                                            </h3>
+                                            <p className="text-base sm:text-lg text-gray-600">{exercise.description}</p>
+                                        </div>
+                                        <div className="flex flex-col items-end gap-2">
+                                            {exercise.points > 0 && (
+                                                <div className="bg-purple-100 text-purple-700 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-sm sm:text-base font-semibold">
+                                                    +{exercise.points} pts
+                                                </div>
+                                            )}
+                                            {completedExercises.has(exercise.id) && (
+                                                <div className="text-2xl sm:text-3xl">✅</div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Tutoriel
+        function TutorialScreen({ onBack }) {
+            const [currentStep, setCurrentStep] = useState(0);
+
+            const steps = [
+                {
+                    title: "Qu'est-ce que le passé composé ?",
+                    content: (
+                        <div className="space-y-4 sm:space-y-6 text-base sm:text-lg">
+                            <p>Le passé composé est utilisé pour parler d'actions terminées dans le passé.</p>
+                            <div className="bg-purple-50 p-4 sm:p-6 rounded-xl">
+                                <p className="font-bold text-lg sm:text-xl mb-3">Formation :</p>
+                                <p className="text-2xl sm:text-3xl text-center font-bold serif">
+                                    <span className="color-blue">auxiliaire</span> + <span className="color-red">participe passé</span>
+                                </p>
+                            </div>
+                            <div className="grid gap-3 sm:gap-4">
+                                <div className="bg-blue-50 p-4 rounded-lg">
+                                    <p className="serif text-lg sm:text-xl">J'<span className="color-blue font-bold">ai</span> <span className="color-red font-bold">mangé</span> une pomme.</p>
+                                </div>
+                                <div className="bg-pink-50 p-4 rounded-lg">
+                                    <p className="serif text-lg sm:text-xl">Elle <span className="color-blue font-bold">est</span> <span className="color-red font-bold">allée</span> au cinéma.</p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                },
+                {
+                    title: "Les deux auxiliaires",
+                    content: (
+                        <div className="space-y-4 sm:space-y-6">
+                            <div className="bg-blue-50 p-4 sm:p-6 rounded-xl">
+                                <p className="text-xl sm:text-2xl font-bold mb-3 text-center color-blue">AVOIR</p>
+                                <p className="mb-2 text-base sm:text-lg">✅ La plupart des verbes</p>
+                                <p className="mb-2 text-base sm:text-lg">❌ Pas d'accord du participe</p>
+                                <div className="mt-4 space-y-2">
+                                    <p className="serif text-lg sm:text-xl">J'<span className="color-blue font-bold">ai</span> <span className="color-red font-bold">mangé</span></p>
+                                    <p className="serif text-lg sm:text-xl">Elle <span className="color-blue font-bold">a</span> <span className="color-red font-bold">mangé</span></p>
+                                </div>
+                            </div>
+
+                            <div className="bg-pink-50 p-4 sm:p-6 rounded-xl">
+                                <p className="text-xl sm:text-2xl font-bold mb-3 text-center color-blue">ÊTRE</p>
+                                <p className="mb-2 text-base sm:text-lg">🏠 15 verbes de déplacement</p>
+                                <p className="mb-2 text-base sm:text-lg">🪞 Verbes pronominaux (SE/S')</p>
+                                <p className="mb-2 text-base sm:text-lg">✏️ Accord avec le sujet</p>
+                                <div className="mt-4 space-y-2">
+                                    <p className="serif text-lg sm:text-xl">Il <span className="color-blue font-bold">est</span> <span className="color-red font-bold">allé</span></p>
+                                    <p className="serif text-lg sm:text-xl">Elle <span className="color-blue font-bold">est</span> <span className="color-red font-bold">allée</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                },
+                {
+                    title: "Les 15 verbes avec ÊTRE",
+                    content: (
+                        <div className="space-y-4 sm:space-y-6">
+                            <p className="text-base sm:text-lg text-center">Les verbes de la « maison d'ÊTRE » :</p>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 bg-white p-4 sm:p-6 rounded-lg">
+                                <p className="text-center font-semibold text-sm sm:text-base">aller</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">arriver</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">descendre</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">entrer</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">monter</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">mourir</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">naître</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">partir</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">passer</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">rester</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">retourner</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">revenir</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">sortir</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">tomber</p>
+                                <p className="text-center font-semibold text-sm sm:text-base">venir</p>
+                            </div>
+                        </div>
+                    )
+                },
+                {
+                    title: "Le participe passé",
+                    content: (
+                        <div className="space-y-4 sm:space-y-6">
+                            <div className="bg-green-50 p-4 sm:p-6 rounded-xl">
+                                <p className="font-bold text-lg sm:text-xl mb-3">Verbes en -ER → -É</p>
+                                <div className="space-y-2 text-base sm:text-lg">
+                                    <p className="serif">manger → <span className="color-red font-bold">mangé</span></p>
+                                    <p className="serif">parler → <span className="color-red font-bold">parlé</span></p>
+                                    <p className="serif">jouer → <span className="color-red font-bold">joué</span></p>
+                                </div>
+                            </div>
+
+                            <div className="bg-blue-50 p-4 sm:p-6 rounded-xl">
+                                <p className="font-bold text-lg sm:text-xl mb-3">Verbes en -IR → -I</p>
+                                <div className="space-y-2 text-base sm:text-lg">
+                                    <p className="serif">finir → <span className="color-red font-bold">fini</span></p>
+                                    <p className="serif">choisir → <span className="color-red font-bold">choisi</span></p>
+                                </div>
+                            </div>
+
+                            <div className="bg-yellow-50 p-4 sm:p-6 rounded-xl">
+                                <p className="font-bold text-lg sm:text-xl mb-3">Verbes irréguliers</p>
+                                <div className="space-y-2 text-sm sm:text-base">
+                                    <p className="serif">faire → <span className="color-red font-bold">fait</span></p>
+                                    <p className="serif">prendre → <span className="color-red font-bold">pris</span></p>
+                                    <p className="serif">voir → <span className="color-red font-bold">vu</span></p>
+                                    <p className="serif">avoir → <span className="color-red font-bold">eu</span></p>
+                                    <p className="serif">être → <span className="color-red font-bold">été</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            ];
+
+            return (
+                <div className="min-h-screen p-4 sm:p-8">
+                    <div className="max-w-3xl mx-auto">
+                        <button 
+                            onClick={onBack}
+                            className="btn-secondary mb-4 sm:mb-6"
+                        >
+                            ← Retour
+                        </button>
+
+                        <div className="card fade-in">
+                            <div className="mb-6 sm:mb-8">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                                        {steps[currentStep].title}
+                                    </h2>
+                                    <span className="text-base sm:text-lg text-gray-500">
+                                        {currentStep + 1} / {steps.length}
+                                    </span>
+                                </div>
+                                <div className="progress-bar">
+                                    <div 
+                                        className="progress-fill"
+                                        style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-6 sm:mb-8">
+                                {steps[currentStep].content}
+                            </div>
+
+                            <div className="flex gap-3 sm:gap-4">
+                                {currentStep > 0 && (
+                                    <button
+                                        onClick={() => setCurrentStep(prev => prev - 1)}
+                                        className="btn-secondary flex-1"
+                                    >
+                                        ← Précédent
+                                    </button>
+                                )}
+                                {currentStep < steps.length - 1 ? (
+                                    <button
+                                        onClick={() => setCurrentStep(prev => prev + 1)}
+                                        className="btn-primary flex-1"
+                                    >
+                                        Suivant →
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={onBack}
+                                        className="btn-primary flex-1"
+                                    >
+                                        Terminé ✓
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Exercice 1 : Formation simple
+        function Exercise1({ onBack, onComplete }) {
+            const [currentQuestion, setCurrentQuestion] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [showResults, setShowResults] = useState(false);
+            const [showModal, setShowModal] = useState(false);
+
+            const questions = [
+                { id: 1, verb: 'manger', pronoun: 'j\'', aux: 'ai', pp: 'mangé', sentence: 'une pizza', possibleAnswers: ['ai mangé'] },
+                { id: 2, verb: 'finir', pronoun: 'tu', aux: 'as', pp: 'fini', sentence: 'tes devoirs', possibleAnswers: ['as fini'] },
+                { id: 3, verb: 'aller', pronoun: 'elle', aux: 'est', pp: 'allée', sentence: 'au marché', possibleAnswers: ['est allée'] },
+                { id: 4, verb: 'faire', pronoun: 'nous', aux: 'avons', pp: 'fait', sentence: 'du sport', possibleAnswers: ['avons fait'] },
+                { id: 5, verb: 'partir', pronoun: 'ils', aux: 'sont', pp: 'partis', sentence: 'en voyage', possibleAnswers: ['sont partis'] },
+            ];
+
+            const checkAnswer = (questionId, answer) => {
+                const question = questions.find(q => q.id === questionId);
+                const correct = question.possibleAnswers.includes(answer.toLowerCase().trim());
+                setAnswers(prev => ({ ...prev, [questionId]: { value: answer, correct: correct } }));
+            };
+
+            const submitAnswers = () => {
+                setShowResults(true);
+                const correctCount = Object.values(answers).filter(a => a.correct).length;
+                if (correctCount === questions.length) {
+                    setShowModal(true);
+                    setTimeout(() => {
+                        onComplete(10, 'ex1');
+                    }, 500);
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-4 sm:p-8">
+                    <div className="max-w-3xl mx-auto">
+                        <button 
+                            onClick={onBack}
+                            className="btn-secondary mb-4 sm:mb-6"
+                        >
+                            ← Retour
+                        </button>
+
+                        <div className="card fade-in">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">
+                                Exercice 1 : Formation
+                            </h2>
+                            <p className="text-center text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+                                Conjugue les verbes au passé composé
+                            </p>
+
+                            <div className="space-y-4 sm:space-y-6">
+                                {questions.map((question, idx) => (
+                                    <div key={question.id} className="bg-gray-50 p-4 sm:p-6 rounded-xl">
+                                        <p className="text-base sm:text-lg font-semibold mb-3">
+                                            {idx + 1}. {question.pronoun} __________ {question.sentence}
+                                        </p>
+                                        <p className="text-sm sm:text-base text-gray-600 mb-3">
+                                            ({question.verb})
+                                        </p>
+                                        <input
+                                            type="text"
+                                            value={answers[question.id]?.value || ''}
+                                            onChange={(e) => checkAnswer(question.id, e.target.value.toLowerCase().trim())}
+                                            disabled={showResults}
+                                            className="w-full"
+                                            placeholder="auxiliaire + participe passé"
+                                        />
+                                        {showResults && (
+                                            <div className={`mt-3 p-3 rounded-lg ${answers[question.id]?.correct ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                                {answers[question.id]?.correct ? (
+                                                    <p className="font-semibold">✓ Correct !</p>
+                                                ) : (
+                                                    <p className="font-semibold">✗ Réponse{question.possibleAnswers.length > 1 ? 's' : ''} : {question.possibleAnswers.join(' ou ')}</p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {!showResults ? (
+                                <button
+                                    onClick={submitAnswers}
+                                    disabled={Object.keys(answers).length !== questions.length}
+                                    className="btn-primary w-full mt-6"
+                                >
+                                    Vérifier
+                                </button>
+                            ) : (
+                                <div className="mt-6">
+                                    <div className="bg-purple-50 p-4 sm:p-6 rounded-xl mb-4">
+                                        <p className="text-xl sm:text-2xl font-bold text-center">
+                                            Score : {Object.values(answers).filter(a => a.correct).length} / {questions.length}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setAnswers({});
+                                            setShowResults(false);
+                                        }}
+                                        className="btn-primary w-full"
+                                    >
+                                        🔄 Recommencer
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {showModal && (
+                        <Modal 
+                            content={
+                                <>
+                                    <div className="text-6xl mb-4">🎉</div>
+                                    <h2 className="text-3xl font-bold text-green-600 mb-4">Bravo !</h2>
+                                    <p className="text-xl">Exercice 1 réussi ! +10 points</p>
+                                </>
+                            }
+                            onClose={() => setShowModal(false)}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // Exercice 2 : Choix de l'auxiliaire (avec système de clic)
+        function Exercise2({ onBack, onComplete }) {
+            const [selectedItem, setSelectedItem] = useState(null);
+            const [answers, setAnswers] = useState({});
+            const [showResults, setShowResults] = useState(false);
+            const [availableAux, setAvailableAux] = useState(['ai', 'as', 'a', 'avons', 'avez', 'ont', 'suis', 'es', 'est', 'sommes', 'êtes', 'sont']);
+            const [showModal, setShowModal] = useState(false);
+
+            const questions = [
+                { id: 1, pronoun: 'J\'', verb: 'mangé', correct: 'ai' },
+                { id: 2, pronoun: 'Tu', verb: 'fini', correct: 'as' },
+                { id: 3, pronoun: 'Elle', verb: 'allée', correct: 'est' },
+                { id: 4, pronoun: 'Nous', verb: 'fait', correct: 'avons' },
+                { id: 5, pronoun: 'Ils', verb: 'partis', correct: 'sont' },
+            ];
+
+            const handleItemClick = (aux, index) => {
+                if (showResults) return;
+                const itemKey = `${aux}-${index}`;
+                setSelectedItem(itemKey === selectedItem ? null : itemKey);
+            };
+
+            const handleZoneClick = (questionId) => {
+                if (!selectedItem || showResults) return;
+
+                if (answers[questionId]) {
+                    setAvailableAux(prev => [...prev, answers[questionId]]);
+                }
+
+                const aux = selectedItem.split('-')[0];
+                setAnswers(prev => ({ ...prev, [questionId]: aux }));
+                setAvailableAux(prev => {
+                    const idx = prev.indexOf(aux);
+                    return idx > -1 ? [...prev.slice(0, idx), ...prev.slice(idx + 1)] : prev;
+                });
+                setSelectedItem(null);
+            };
+
+            const handleAnswerRemove = (questionId) => {
+                if (showResults) return;
+                const aux = answers[questionId];
+                if (aux) {
+                    setAvailableAux(prev => [...prev, aux]);
+                    const newAnswers = { ...answers };
+                    delete newAnswers[questionId];
+                    setAnswers(newAnswers);
+                }
+            };
+
+            const submitAnswers = () => {
+                setShowResults(true);
+                const correctCount = questions.filter(q => answers[q.id] === q.correct).length;
+                if (correctCount === questions.length) {
+                    setShowModal(true);
+                    setTimeout(() => {
+                        onComplete(20, 'ex2');
+                    }, 500);
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-4 sm:p-8">
+                    <div className="max-w-3xl mx-auto">
+                        <button 
+                            onClick={onBack}
+                            className="btn-secondary mb-4 sm:mb-6"
+                        >
+                            ← Retour
+                        </button>
+
+                        <div className="card fade-in">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">
+                                Exercice 2 : L'auxiliaire
+                            </h2>
+                            <p className="text-center text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+                                Clique sur un auxiliaire puis sur la case correspondante
+                            </p>
+
+                            <div className="mb-6 sm:mb-8">
+                                <p className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+                                    Auxiliaires disponibles :
+                                </p>
+                                <div className="flex flex-wrap gap-2 sm:gap-3">
+                                    {availableAux.map((aux, index) => {
+                                        const itemKey = `${aux}-${index}`;
+                                        return (
+                                            <button
+                                                key={itemKey}
+                                                onClick={() => handleItemClick(aux, index)}
+                                                className={`clickable-item px-4 sm:px-6 py-3 sm:py-4 bg-blue-100 border-2 border-blue-300 rounded-xl font-bold text-base sm:text-lg ${
+                                                    selectedItem === itemKey ? 'selected' : ''
+                                                }`}
+                                            >
+                                                {aux}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                {selectedItem && (
+                                    <p className="mt-3 text-blue-600 font-semibold text-base sm:text-lg">
+                                        ✓ "{selectedItem.split('-')[0]}" sélectionné - Clique sur une case ci-dessous
+                                    </p>
+                                )}
+                            </div>
+
+                            <div className="space-y-3 sm:space-y-4">
+                                {questions.map(question => {
+                                    const isCorrect = answers[question.id] === question.correct;
+                                    const isWrong = showResults && answers[question.id] && !isCorrect;
+                                    
+                                    return (
+                                        <div
+                                            key={question.id}
+                                            className={`p-4 sm:p-6 rounded-xl border-2 ${
+                                                showResults
+                                                    ? isCorrect
+                                                        ? 'bg-green-50 border-green-500'
+                                                        : isWrong
+                                                        ? 'bg-red-50 border-red-500'
+                                                        : 'bg-gray-50 border-gray-300'
+                                                    : answers[question.id]
+                                                    ? 'drop-zone filled'
+                                                    : selectedItem
+                                                    ? 'drop-zone available'
+                                                    : 'border-gray-300'
+                                            }`}
+                                        >
+                                            <div className="flex items-center justify-between gap-3">
+                                                <div 
+                                                    onClick={() => !answers[question.id] && handleZoneClick(question.id)}
+                                                    className="flex-1 cursor-pointer"
+                                                >
+                                                    <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                                                        <span className="text-lg sm:text-xl font-semibold">{question.pronoun}</span>
+                                                        {answers[question.id] ? (
+                                                            <>
+                                                                <span className="color-blue font-bold text-lg sm:text-xl">{answers[question.id]}</span>
+                                                                <span className="color-red font-bold text-lg sm:text-xl">{question.verb}</span>
+                                                                {!showResults && (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleAnswerRemove(question.id);
+                                                                        }}
+                                                                        className="ml-auto text-red-500 hover:text-red-700 text-2xl min-h-[40px] min-w-[40px]"
+                                                                    >
+                                                                        ✕
+                                                                    </button>
+                                                                )}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <span className="text-gray-400 text-lg sm:text-xl">
+                                                                    {selectedItem ? '👆' : '___'}
+                                                                </span>
+                                                                <span className="color-red font-bold text-lg sm:text-xl">{question.verb}</span>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                {showResults && (
+                                                    <div className="text-2xl sm:text-3xl">
+                                                        {isCorrect ? '✓' : isWrong ? '✗' : ''}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {showResults && isWrong && (
+                                                <p className="text-sm sm:text-base text-red-600 mt-2">
+                                                    Réponse correcte : {question.correct}
+                                                </p>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {!showResults ? (
+                                <button
+                                    onClick={submitAnswers}
+                                    disabled={Object.keys(answers).length !== questions.length}
+                                    className="btn-primary w-full mt-6"
+                                >
+                                    {Object.keys(answers).length === questions.length ? 'Vérifier' : `Place tous les auxiliaires (${Object.keys(answers).length}/${questions.length})`}
+                                </button>
+                            ) : (
+                                <div className="mt-6">
+                                    <div className="bg-purple-50 p-4 sm:p-6 rounded-xl mb-4">
+                                        <p className="text-xl sm:text-2xl font-bold text-center mb-2">
+                                            Score : {questions.filter(q => answers[q.id] === q.correct).length} / {questions.length}
+                                        </p>
+                                        {questions.filter(q => answers[q.id] === q.correct).length === questions.length && (
+                                            <p className="text-green-600 font-semibold text-center text-base sm:text-lg">
+                                                🎉 Parfait ! +20 points
+                                            </p>
+                                        )}
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setAnswers({});
+                                            setShowResults(false);
+                                            setAvailableAux(['ai', 'as', 'a', 'avons', 'avez', 'ont', 'suis', 'es', 'est', 'sommes', 'êtes', 'sont']);
+                                            setSelectedItem(null);
+                                        }}
+                                        className="btn-primary w-full"
+                                    >
+                                        🔄 Recommencer
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {showModal && (
+                        <Modal 
+                            content={
+                                <>
+                                    <div className="text-6xl mb-4">🎉</div>
+                                    <h2 className="text-3xl font-bold text-green-600 mb-4">Excellent !</h2>
+                                    <p className="text-xl">Exercice 2 réussi ! +20 points</p>
+                                </>
+                            }
+                            onClose={() => setShowModal(false)}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // Exercice 3 : Accords
+        function Exercise3({ onBack, onComplete }) {
+            const [answers, setAnswers] = useState({});
+            const [showResults, setShowResults] = useState(false);
+            const [showModal, setShowModal] = useState(false);
+
+            const questions = [
+                { id: 1, sentence: 'Elle est', verb: 'aller', correct: 'allée' },
+                { id: 2, sentence: 'Ils sont', verb: 'partir', correct: 'partis' },
+                { id: 3, sentence: 'Elles sont', verb: 'venir', correct: 'venues' },
+                { id: 4, sentence: 'Il est', verb: 'tomber', correct: 'tombé' },
+                { id: 5, sentence: 'Nous (f) sommes', verb: 'arriver', correct: 'arrivées' },
+            ];
+
+            const checkAnswer = (questionId, answer) => {
+                const question = questions.find(q => q.id === questionId);
+                setAnswers(prev => ({ ...prev, [questionId]: { value: answer, correct: answer === question.correct } }));
+            };
+
+            const submitAnswers = () => {
+                setShowResults(true);
+                const correctCount = Object.values(answers).filter(a => a.correct).length;
+                if (correctCount === questions.length) {
+                    setShowModal(true);
+                    setTimeout(() => {
+                        onComplete(30, 'ex3');
+                    }, 500);
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-4 sm:p-8">
+                    <div className="max-w-3xl mx-auto">
+                        <button 
+                            onClick={onBack}
+                            className="btn-secondary mb-4 sm:mb-6"
+                        >
+                            ← Retour
+                        </button>
+
+                        <div className="card fade-in">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6">
+                                Exercice 3 : Les Accords
+                            </h2>
+                            <p className="text-center text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+                                Accorde le participe passé avec ÊTRE
+                            </p>
+
+                            <div className="space-y-4 sm:space-y-6">
+                                {questions.map((question, idx) => (
+                                    <div key={question.id} className="bg-gray-50 p-4 sm:p-6 rounded-xl">
+                                        <p className="text-base sm:text-lg font-semibold mb-3">
+                                            {idx + 1}. {question.sentence} __________
+                                        </p>
+                                        <p className="text-sm sm:text-base text-gray-600 mb-3">
+                                            ({question.verb})
+                                        </p>
+                                        <input
+                                            type="text"
+                                            value={answers[question.id]?.value || ''}
+                                            onChange={(e) => checkAnswer(question.id, e.target.value.toLowerCase().trim())}
+                                            disabled={showResults}
+                                            className="w-full"
+                                            placeholder="participe passé accordé"
+                                        />
+                                        {showResults && (
+                                            <div className={`mt-3 p-3 rounded-lg ${answers[question.id]?.correct ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                                {answers[question.id]?.correct ? (
+                                                    <p className="font-semibold">✓ Correct !</p>
+                                                ) : (
+                                                    <p className="font-semibold">✗ Réponse : {question.correct}</p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {!showResults ? (
+                                <button
+                                    onClick={submitAnswers}
+                                    disabled={Object.keys(answers).length !== questions.length}
+                                    className="btn-primary w-full mt-6"
+                                >
+                                    Vérifier
+                                </button>
+                            ) : (
+                                <div className="mt-6">
+                                    <div className="bg-purple-50 p-4 sm:p-6 rounded-xl mb-4">
+                                        <p className="text-xl sm:text-2xl font-bold text-center mb-2">
+                                            Score : {Object.values(answers).filter(a => a.correct).length} / {questions.length}
+                                        </p>
+                                        {Object.values(answers).filter(a => a.correct).length === questions.length && (
+                                            <p className="text-green-600 font-semibold text-center text-base sm:text-lg">
+                                                🎉 Parfait ! +30 points
+                                            </p>
+                                        )}
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            setAnswers({});
+                                            setShowResults(false);
+                                        }}
+                                        className="btn-primary w-full"
+                                    >
+                                        🔄 Recommencer
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {showModal && (
+                        <Modal 
+                            content={
+                                <>
+                                    <div className="text-6xl mb-4 dancing-person">🕺</div>
+                                    <h2 className="text-3xl font-bold text-green-600 mb-4">Extraordinaire !</h2>
+                                    <p className="text-xl">Exercice 3 réussi ! +30 points</p>
+                                    <p className="text-lg mt-4">Tu maîtrises le passé composé !</p>
+                                </>
+                            }
+                            onClose={() => setShowModal(false)}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // Antisèche
+        function CheatsheetScreen({ onBack }) {
+            return (
+                <div className="min-h-screen p-4 sm:p-8">
+                    <div className="max-w-5xl mx-auto">
+                        <button 
+                            onClick={onBack}
+                            className="btn-secondary mb-4 sm:mb-6"
+                        >
+                            ← Retour
+                        </button>
+
+                        <div className="card fade-in">
+                            <h1 className="text-3xl sm:text-4xl font-bold text-center mb-4 sm:mb-6">
+                                Antisèche du Passé Composé
+                            </h1>
+                            <p className="text-center text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+                                Tout ce qu'il faut savoir
+                            </p>
+
+                            <div className="space-y-6 sm:space-y-8">
+                                {/* Formation */}
+                                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 sm:p-6 rounded-xl">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+                                        📐 Formation
+                                    </h2>
+                                    <p className="text-2xl sm:text-3xl text-center font-bold serif mb-4">
+                                        <span className="color-blue">auxiliaire</span> + <span className="color-red">participe passé</span>
+                                    </p>
+                                </div>
+
+                                {/* Participes passés */}
+                                <div className="bg-yellow-50 p-4 sm:p-6 rounded-xl">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+                                        📝 Participes passés
+                                    </h2>
+                                    <div className="grid sm:grid-cols-3 gap-3 sm:gap-4">
+                                        <div className="bg-white p-4 rounded-lg">
+                                            <p className="font-bold mb-2 text-green-600">Verbes en -ER</p>
+                                            <p className="text-sm sm:text-base">manger → <span className="color-red">mangé</span></p>
+                                        </div>
+                                        <div className="bg-white p-4 rounded-lg">
+                                            <p className="font-bold mb-2 text-blue-600">Verbes en -IR</p>
+                                            <p className="text-sm sm:text-base">finir → <span className="color-red">fini</span></p>
+                                        </div>
+                                        <div className="bg-white p-4 rounded-lg">
+                                            <p className="font-bold mb-2 text-purple-600">Irréguliers</p>
+                                            <p className="text-sm sm:text-base">faire → <span className="color-red">fait</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Auxiliaires */}
+                                <div className="bg-gradient-to-r from-blue-50 to-pink-50 p-4 sm:p-6 rounded-xl">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+                                        🔑 Quel auxiliaire ?
+                                    </h2>
+                                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                                        <div className="bg-white p-4 sm:p-6 rounded-lg border-2 border-blue-300">
+                                            <p className="text-lg sm:text-xl font-bold mb-3 text-center color-blue">AVOIR</p>
+                                            <p className="mb-2 text-sm sm:text-base">✅ Cas général</p>
+                                            <p className="mb-2 text-sm sm:text-base">❌ Pas d'accord</p>
+                                        </div>
+                                        <div className="bg-white p-4 sm:p-6 rounded-lg border-2 border-pink-300">
+                                            <p className="text-lg sm:text-xl font-bold mb-3 text-center color-blue">ÊTRE</p>
+                                            <p className="mb-2 text-sm sm:text-base">🏠 15 verbes</p>
+                                            <p className="mb-2 text-sm sm:text-base">✏️ Accord sujet</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Les 15 verbes */}
+                                <div className="bg-blue-50 p-4 sm:p-6 rounded-xl">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+                                        🏠 Les 15 verbes d'ÊTRE
+                                    </h2>
+                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3 bg-white p-4 sm:p-6 rounded-lg">
+                                        <p className="text-center font-semibold text-sm sm:text-base">aller</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">arriver</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">descendre</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">entrer</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">monter</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">mourir</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">naître</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">partir</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">passer</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">rester</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">retourner</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">revenir</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">sortir</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">tomber</p>
+                                        <p className="text-center font-semibold text-sm sm:text-base">venir</p>
+                                    </div>
+                                </div>
+
+                                {/* Accords */}
+                                <div className="bg-purple-50 p-4 sm:p-6 rounded-xl">
+                                    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+                                        ✏️ Les accords
+                                    </h2>
+                                    <div className="bg-white p-4 sm:p-6 rounded-lg">
+                                        <div className="grid sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="font-bold mb-2">Masculin</p>
+                                                <p className="serif text-sm sm:text-base">Il est allé</p>
+                                                <p className="serif text-sm sm:text-base">Ils sont allés</p>
+                                            </div>
+                                            <div>
+                                                <p className="font-bold mb-2">Féminin</p>
+                                                <p className="serif text-sm sm:text-base">Elle est allée</p>
+                                                <p className="serif text-sm sm:text-base">Elles sont allées</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p className="text-center text-gray-500 italic mt-6 sm:mt-8 text-sm sm:text-base">
+                                par Benoit Cassagnau
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Modal
+        function Modal({ content, onClose }) {
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="text-center">
+                            {content}
+                            <button onClick={onClose} className="btn-primary mt-6">
+                                Continuer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
